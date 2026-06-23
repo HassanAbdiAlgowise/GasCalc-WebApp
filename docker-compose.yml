@@ -1,0 +1,58 @@
+version: "3.9"
+
+services:
+
+  api:
+    image: hassanabdi0921h/gas-calculation-backend:latest
+    container_name: gas-api
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=GasDb;User=sa;Password=YourStrong!Pass123;TrustServerCertificate=True"
+      Redis__ConnectionString: "redis:6379"
+    depends_on:
+      - sqlserver
+      - redis
+    networks:
+      - gas-network
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: gas-sql
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "YourStrong!Pass123"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+    networks:
+      - gas-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: gas-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - gas-network
+
+  frontend:
+    image: hassanabdi0921h/gas-calculation-frontend:latest
+    container_name: gas-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+    networks:
+      - gas-network
+
+volumes:
+  sql_data:
+  redis_data:
+
+networks:
+  gas-network:
