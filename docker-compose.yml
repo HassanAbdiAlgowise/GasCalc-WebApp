@@ -11,6 +11,7 @@ services:
       ASPNETCORE_ENVIRONMENT: Production
       ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=GasDb;User=sa;Password=YourStrong!Pass123;TrustServerCertificate=True"
       Redis__ConnectionString: "redis:6379"
+      Cors__AllowedOrigins__0: "http://91.239.211.223:3000"
     depends_on:
       - sqlserver
       - redis
