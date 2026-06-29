@@ -3,15 +3,16 @@ version: "3.9"
 services:
 
   api:
-    image: hassanabdi0921h/gas-calculation-backend:latest
+    image: hassanabdi0921h/gas-calculation-backend:v6
     container_name: gas-api
     ports:
       - "8080:8080"
+    volumes:
+      - ./Files:/app/Files
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=GasDb;User=sa;Password=YourStrong!Pass123;TrustServerCertificate=True"
       Redis__ConnectionString: "redis:6379"
-      Cors__AllowedOrigins__0: "http://91.239.211.223:3000"
     depends_on:
       - sqlserver
       - redis
@@ -42,7 +43,7 @@ services:
       - gas-network
 
   frontend:
-    image: hassanabdi0921h/gas-calculation-frontend:latest
+    image: hassanabdi0921h/gas-calculation-frontend:v2
     container_name: gas-frontend
     ports:
       - "3000:80"
